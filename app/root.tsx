@@ -1,20 +1,13 @@
-import React, { useEffect } from "react";
 import { Links, Meta, Outlet, Scripts, ScrollRestoration } from "react-router";
+import { useEffect } from "react";
 import { usePuterStore } from "./lib/puter";
-import "./app.css"; // 👈 Tailwind styles සඳහා අනිවාර්යයි!
+import "./app.css";
 
-export const links = () => [
-    {
-        rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap",
-    },
-];
-
-export function Layout({ children }: { children: React.ReactNode }) {
-    const { init } = usePuterStore();
+export default function App() {
+    const init = usePuterStore((state) => state.init);
 
     useEffect(() => {
-        init(); // App එක load වෙද්දීම Puter සක්‍රීය වේ
+        init();
     }, [init]);
 
     return (
@@ -22,20 +15,20 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <head>
             <meta charSet="utf-8" />
             <meta name="viewport" content="width=device-width, initial-scale=1" />
-            {/* 👈 Puter official script එක head එක ඇතුළතින් load කිරීම */}
-            <script src="https://js.puter.com/v2/"></script>
             <Meta />
             <Links />
+
+            {/* 1️⃣ Puter Script එක */}
+            <script src="https://js.puter.com/v2/"></script>
+
+            {/* 2️⃣ 🚀 මෙන්න මෙතනට තමයි PDF.js CDN එක දාන්න ඕනේ! */}
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
         </head>
         <body>
-        {children}
+        <Outlet />
         <ScrollRestoration />
-        <Scripts /> {/* 👈 JavaScript ක්‍රියාත්මක වීමට අනිවාර්යයි */}
+        <Scripts />
         </body>
         </html>
     );
-}
-
-export default function App() {
-    return <Outlet />;
 }
